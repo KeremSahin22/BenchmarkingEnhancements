@@ -50,6 +50,21 @@ h2 {
   line-height: 1.3;
 }
 
+.nd-pageheader p.authors {
+  font-size: 1.2rem !important;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+  font-weight: 300;
+}
+
+.nd-pageheader p.affiliations {
+  font-size: 0.9rem !important;
+  text-align: center;
+  margin-top: 0;
+  font-weight: 300;
+}
+
 .citation {
   margin-top: 15px;
   clear: both;
