@@ -1,121 +1,166 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<title>Your Project Name</title>
-<meta property="og:title" content=Your Project Name" />
-<meta name="twitter:title" content="Your Project Name" />
-<meta name="description" content="Your project about your cool topic described right here." />
-<meta property="og:description" content="Your project about your cool topic described right here." />
-<meta name="twitter:description" content="Your project about your cool topic described right here." />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary" /> 
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<!-- bootstrap for mobile-friendly layout -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-<link href="style.css" rel="stylesheet">
+  <title>Your Project Name</title>
+  <meta property="og:title" content=Your Project Name" />
+  <meta name="twitter:title" content="Your Project Name" />
+  <meta name="description" content="Your project about your cool topic described right here." />
+  <meta property="og:description" content="Your project about your cool topic described right here." />
+  <meta name="twitter:description" content="Your project about your cool topic described right here." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- bootstrap for mobile-friendly layout -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
 
 </head>
+
 <body class="nd-docs">
-<div class="nd-pageheader">
- <div class="container">
- <h1 class="lead">
- <nobr class="widenobr"> <nobr class="widenobr">Benchmarking Algorithmic Enhancements for Large Language Models</nobr>
-</nobr>
- </h1>
- <p class="authors">Kerem Sahin, Alex Loftus</p>
- <p class="affiliations">
-   Northeastern University
- </p>
- </div>
-</div><!-- end nd-pageheader -->
-
-<div class="container">
-  <div class="row">
-  <div class="col">
-  <h2 class="text-center">Which Modern LLM Algorithmic Innovations Most Successfully Transfer to Older, Smaller Transformer Implementations?</h2>
-  <p class="text-justify">Algorithmic improvements have the potential to significantly enhance the capabilities of large
-    language models (LLMs) while maintaining favorable resource usage. Yet, recent impactful
-    algorithmic improvements aimed at enhancing LLMs remain scattered across studies. In this work, we
-    contribute a systematic evaluation framework inspired by the ConvNext methodology.
-    Specifically, we compare a diverse set of algorithmic enhancements by measuring inference
-    throughput, memory utilization, training loss trajectories, and GPU FLOPS usage. Our
-    benchmarking employs a GPT-2 Small model trained on the OpenWebText dataset serving as a
-    baseline for comparison. Our analysis highlights improvements gained from the algorithmic
-    modifications across different evaluation dimensions. We provide practical insights for
-    researchers and practitioners, enabling them to strategically prioritize algorithmic enhancements
-    to maximize performance gains according to their specific goals.</p>
-  </div>
-  </div>
-  <div class="row">
-  <div class="col">
-
-<h2>Related Work; Methods; Link to Code; Experiments; Disucssion</h2>
-
-<p>
-Scoring for your final project writeup rubric will be as follows:
-<br>
-+1: You have a good title and have identified the project team members as authors.
-<br>
-+1: Introduction poses the question
-<br>
-+1: Related work section properly cites and links and says a couple words about the paper(s) on which the work is based, and how your work relates.
-<br>
-+1: The methods you are using are described briefly and precisely.
-<br>
-+1: The aspects that distinguish your study from previous work are described clearly (e.g. what is your particular focus)
-<br>
-+1: Your analysis is solid, and you use diagrams effectively to show your main methods or results visually.
-<br>
-+1: You have created some code (e.g., link to github), demonstrating the methods.
-<br>
-+1: You include a discussion with your own opinions, questions, or perspective on your findings.
-</p>
-
-<h2>Grouped Query Attention</h2>
-<h2>Rotary Position Embedding</h2>
-<h2>SwiGLU</h2>
-<h2>SOAP</h2>
-<h2>MUON</h2>
-<h2>RMSNorm</h2>
-
-<h3>References</h3>
-
-<p><a name="bottou-1990">[1]</a> <a href="https://papers.baulab.info/Bottou-1990.pdf"
-  >L&eacute;on Bottou and Patrick Gallinari.
-  <em>A framework for the cooperation of learning algorithms.</em></a>
-  Advances in neural information processing systems 3 (1990).
-</p>
-
-<h2>Team Members</h2>
-                                                   
-<p>Make sure to list here is who is on the team.</p>
-
-  
-</div><!--col-->
-</div><!--row -->
-</div> <!-- container -->
-
-<footer class="nd-pagefooter">
-  <div class="row">
-    <div class="col-6 col-md text-center">
-      <a href="https://cs7150.baulab.info/">About CS 7150</a>
+  <div class="nd-pageheader">
+    <div class="container">
+      <h1 class="lead">
+        <nobr class="widenobr">
+          <nobr class="widenobr">Benchmarking Algorithmic Enhancements for Large Language Models</nobr>
+        </nobr>
+      </h1>
+      <p class="authors">Kerem Sahin, Alex Loftus</p>
+      <p class="affiliations">
+        Northeastern University
+      </p>
     </div>
-  </div>
-</footer>
+  </div><!-- end nd-pageheader -->
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h2 class="text-center">Which Modern LLM Algorithmic Innovations Most Successfully Transfer to Older, Smaller
+          Transformer Implementations?</h2>
+        <p class="text-justify">Algorithmic improvements have the potential to significantly enhance the capabilities of
+          large
+          language models (LLMs) while maintaining favorable resource usage. Yet, recent impactful
+          algorithmic improvements aimed at enhancing LLMs remain scattered across studies. In this work, we
+          contribute a systematic evaluation framework inspired by the ConvNext methodology.
+          Specifically, we compare a diverse set of algorithmic enhancements by measuring inference
+          throughput, memory utilization, training loss trajectories, and GPU FLOPS usage. Our
+          benchmarking employs a GPT-2 Small model trained on the OpenWebText dataset serving as a
+          baseline for comparison. Our analysis highlights improvements gained from the algorithmic
+          modifications across different evaluation dimensions. We provide practical insights for
+          researchers and practitioners, enabling them to strategically prioritize algorithmic enhancements
+          to maximize performance gains according to their specific goals.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2 class="text-center">Experimental Setup</h2>
+
+        <h2>Related Work; Methods; Experiments;</h2>
+
+        <p>
+          Scoring for your final project writeup rubric will be as follows:
+          <br>
+          +1: You have a good title and have identified the project team members as authors.
+          <br>
+          +1: Introduction poses the question
+          <br>
+          +1: Related work section properly cites and links and says a couple words about the paper(s) on which the work
+          is based, and how your work relates.
+          <br>
+          +1: The methods you are using are described briefly and precisely.
+          <br>
+          +1: The aspects that distinguish your study from previous work are described clearly (e.g. what is your
+          particular focus)
+          <br>
+          +1: Your analysis is solid, and you use diagrams effectively to show your main methods or results visually.
+          <br>
+          +1: You have created some code (e.g., link to github), demonstrating the methods.
+          <br>
+          +1: You include a discussion with your own opinions, questions, or perspective on your findings.
+        </p>
+
+        <h2>Grouped Query Attention</h2>
+        <p class="text-justify">
+          With normal Multi-Head Attention, every query matrix has a corresponding key and value
+          matrix.
+          The key idea behind Grouped Query Attention is to group query matrices to use the same key and value matrices
+          in order to reduce the number of matrices while keeping a similar performance.
+        </p>
+        <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+          <img src="media/groupedq_attn/gqa.svg" alt="GQA Illustration" style="max-width: 100%; height: auto;">
+          <p style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+            In Multi-Head Attention, every query matrix has a corresponding key and value matrix whereas with Grouped Query Attention, we grouped queries to share the key and value matrices.
+          </p>
+        </div>
+        <p class="text-justify">
+            When we implement the Grouped Query Attention, the main metrics that are relavent
+            are going to be GPU Memory used throughout training and our perplexity. As we can see from the 
+            experimental results, the Grouped Query Attention is able to reduce the GPU memory usage by ~100MB while keeping the
+            perplexity and loss at a similar as the normal Multi-Head Attention. On top of that, the memory advantages are going to be 
+            even more pronounced when we are using larger models with bigger dimension sizes, more number of heads and layers. Therefore, we can conclude that the Grouped Query Attention is an effective method to 
+            reduce the GPU memory usage while keeping the performance at a similar level.
+        </p>
+        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+          <img src="media/groupedq_attn/gqa_gp_gb_iter.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
+          <img src="media/groupedq_attn/gqa_val_perplexity.svg" alt="Second image description" style="max-width: 45%; height: auto;">
+          <p style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+            The memory used per iteration has dropped by ~100MB with the Grouped Query Attention. The perplexity lines are on top of each other, indicating that the performance is similar.
+          </p>
+        </div>
+        <h2>Rotary Position Embedding</h2>
+        <h2>SwiGLU</h2>
+        <h2>SOAP</h2>
+        <h2>MUON</h2>
+        <h2>RMSNorm</h2>
+        <h2>Discussion</h2>
+        <h2>Link to Code</h2>
+
+        <h3>References</h3>
+
+        <p><a name="bottou-1990">[1]</a> <a href="https://papers.baulab.info/Bottou-1990.pdf">L&eacute;on Bottou and
+            Patrick Gallinari.
+            <em>A framework for the cooperation of learning algorithms.</em></a>
+          Advances in neural information processing systems 3 (1990).
+        </p>
+
+        <h2>Team Members</h2>
+
+        <p>Kerem Sahin</p>
+        <p>Alex Loftus</p>
+
+
+
+      </div><!--col-->
+    </div><!--row -->
+  </div> <!-- container -->
+
+  <footer class="nd-pagefooter">
+    <div class="row">
+      <div class="col-6 col-md text-center">
+        <a href="https://cs7150.baulab.info/">About CS 7150</a>
+      </div>
+    </div>
+  </footer>
 
 </body>
 <script>
-$(document).on('click', '.clickselect', function(ev) {
-  var range = document.createRange();
-  range.selectNodeContents(this);
-  var sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
-});
-// Google analytics below.
-window.dataLayer = window.dataLayer || [];
+  $(document).on('click', '.clickselect', function (ev) {
+    var range = document.createRange();
+    range.selectNodeContents(this);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+  // Google analytics below.
+  window.dataLayer = window.dataLayer || [];
 </script>
+
 </html>
