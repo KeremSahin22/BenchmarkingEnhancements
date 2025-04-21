@@ -93,7 +93,7 @@
               <td>Long‑context generalisation, lower perplexity</td>
             </tr>
             <tr>
-              <td>SwiGLU Activation</td>
+              <td>SwiGLU</td>
               <td>GELU</td>
               <td>Higher model capacity at fixed FLOPs</td>
             </tr>
@@ -290,7 +290,7 @@ positional encoding method.
         <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
           <p
             style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
-            SwiGLU
+            SwiGLU provides a decrease for perplexity by ~2 points. However, it leads to ~100.000 less throughput which also slows down the training process. The newly introduced parameters also increase the GPU Memory Usage by ~350MB
           </p>
         </div>
         <p class="text-justify">
@@ -300,39 +300,11 @@ positional encoding method.
           is cutoff at ~20k, while the baseline continued training until ~22k. Since we have allowed each model to train for 3 hours, this indicates that the training of the SwiGLU model was slower than the baseline. When we dig further, we also see that the training throughput is 100.000 tokens less than the baseline. Lastly, the new parameters have 
           introduced 350MB more GPU Memory usage throughout training iterations. Even if SwiGLU boosts model capability, there are concerns about memory usage, training and inference speed.
         </p>
-        <h2>SOAP</h2>
-        <h2>MUON</h2>
-        <h2>RMSNorm</h2>
-        <h2>Discussion</h2>
-        <h2>Link to Code</h2>
-
-        <h3>References</h3>
-
-        <p><a name="bottou-1990">[1]</a> <a href="https://papers.baulab.info/Bottou-1990.pdf">L&eacute;on Bottou and
-            Patrick Gallinari.
-            <em>A framework for the cooperation of learning algorithms.</em></a>
-          Advances in neural information processing systems 3 (1990).
-        </p>
-
-        <h2>Team Members</h2>
-
-        <p>Kerem Sahin</p>
-        <p>Alex Loftus</p>
-
-
 
       </div><!--col-->
     </div><!--row -->
   </div> <!-- container -->
           <!-- RoPE -->
-      <article class="my-4">
-        <h3>Rotary Positional Embedding (RoPE)</h3>
-      </article>
-
-      <!-- SwiGLU -->
-      <article class="my-4">
-        <h3>SwiGLU Activation</h3>
-      </article>
 
       <!-- SOAP -->
       <article class="my-4">
@@ -381,17 +353,21 @@ positional encoding method.
     <section id="discussion" class="my-5">
       <h2 class="text-center">Discussion &amp; Recommended Recipe</h2>
       <p class="text-justify">
-        We evaluated a series of drop‑in algorithmic enhancements to GPT‑2 Small:
-        Grouped Query Attention (GQA) reduced GPU memory by ≈ 100 MB with negligible impact on perplexity.
-        The SOAP optimizer provided slight late‐stage perplexity gains but cut throughput by ~ 40 %, so it's not
-        recommended for small models.
-        MUON underperformed on GPT‑2 Small, increasing perplexity by + 0.8 and slowing training by 6 %.
-        RMSNorm delivered a ~ 2 % tokens/s boost with equal perplexity,
-        and PyTorch FlashAttention v2 more than doubled inference speed while shaving ≈ 180 MB of memory.
-        Rotary Positional Embeddings (RoPE) and SwiGLU activations remain promising per prior work but require
-        dedicated benchmarking in this setup.
-        Based on these findings, we recommend integrating GQA, RMSNorm, and FlashAttention v2 for immediate
-        efficiency gains on resource‑constrained GPUs, and caution careful evaluation of SOAP and MUON.
+        We evaluated a series of drop-in algorithmic enhancements to GPT-2 
+        Small: Grouped Query Attention (GQA) reduced GPU memory by ≈100 MB 
+        with negligible impact on perplexity. The SOAP optimizer provided 
+        slight late-stage perplexity gains but cut throughput by ~40%, so 
+        it's not recommended for small models. MUON underperformed on GPT-2 
+        Small, increasing perplexity by +0.8 and slowing training by 6%. 
+        RMSNorm delivered a ~2% tokens/s boost with equal perplexity, and 
+        PyTorch FlashAttention v2 more than doubled inference speed while 
+        reducing memory usage by ≈180 MB. Rotary Positional Embeddings (RoPE) 
+        and SwiGLU activations remain promising for increasing model capability 
+        but they impact computation speed. Based on these findings, we recommend 
+        integrating GQA, RMSNorm, and FlashAttention v2 for immediate efficiency 
+        gains on resource-constrained GPUs, and suggest careful evaluation of SOAP 
+        and MUON. SwiGLU and RoPE are recommended for decreasing model perplexity, 
+        but caution is needed regarding their computational requirements.
       </p>
     </section>
 
@@ -399,7 +375,7 @@ positional encoding method.
     <!-- ================= CODE LINK ================= -->
     <section id="code" class="my-5 text-center">
       <h2>Code &amp; Data</h2>
-      <p class="lead mb-1"><a href="https://github.com/loftuslab/gpt2-retrofit" target="_blank">github.com/loftuslab/gpt2‑retrofit</a></p>
+      <p class="lead mb-1"><a href="https://github.com/loftusa/GPTNext" target="_blank">github.com/loftuslab/gpt2‑retrofit</a></p>
       <p class="small text-muted">MIT License · Reproducible with one‑line <code>bash launch.sh</code></p>
     </section>
 
