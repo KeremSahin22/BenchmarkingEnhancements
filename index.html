@@ -48,11 +48,11 @@
     <section id="setup" class="my-5">
       <h2 class="text-center">Experimental Setup</h2>
       <ul>
-        <li><strong>Base model:</strong> GPT‑2 Small (124 M parameters)</li>
-        <li><strong>Dataset:</strong> 4 GB subset of <a href="https://github.com/jcpeterson/openwebtext">OpenWebText</a>
-          (≈ 40 M tokens)</li>
-        <li><strong>Compute:</strong> Single NVIDIA A100 40 GB, PyTorch 2.2, bfloat16 precision</li>
-        <li><strong>Training budget:</strong> 5 hours wall‑clock ≈ 1600 optimisation steps (batch = 256 tokens)</li>
+        <li><strong>Base model:</strong> GPT‑2 Small (124 M parameters) - NanoGPT implementation</li>
+        <li><strong>Dataset:</strong> Subset of <a href="https://github.com/jcpeterson/openwebtext">OpenWebText</a>
+          (≈ 4B tokens)</li>
+        <li><strong>Compute:</strong> Single NVIDIA A100 80 GB, PyTorch 2.5, bfloat16 precision</li>
+        <li><strong>Training budget:</strong> 3 hours wall‑clock ≈ 1600 optimisation steps (batch = 512 tokens)</li>
         <li><strong>Metrics:</strong> validation perplexity, loss trajectory, MFU (Model FLOPs Utilisation), tokens/s,
           peak GPU RAM, and wall‑clock iterations / s</li>
       </ul>
