@@ -25,7 +25,7 @@
       <h1 class="lead"><nobr class="widenobr">Benchmarking Algorithmic Enhancements for Large Language Models</nobr></h1>
       <p class="authors">Kerem Sahin &nbsp;•&nbsp; Alex Loftus</p>
       <p class="affiliations">Khoury College of Computer Sciences, Northeastern University</p>
-      <p class="text-white-50 mb-0">CS 7150: Deep Learning — Spring 2025</p>
+      <p class="text-white-50 mb-0">CS 7150: Deep Learning — Spring 2025</p>
     </div>
   </header>
 
@@ -52,9 +52,9 @@
         <li><strong>Dataset:</strong> 4 GB subset of <a href="https://github.com/jcpeterson/openwebtext">OpenWebText</a>
           (≈ 40 M tokens)</li>
         <li><strong>Compute:</strong> Single NVIDIA A100 40 GB, PyTorch 2.2, bfloat16 precision</li>
-        <li><strong>Training budget:</strong> 5 hours wall‑clock ≈ 1600 optimisation steps (batch = 256 tokens)</li>
+        <li><strong>Training budget:</strong> 5 hours wall‑clock ≈ 1600 optimisation steps (batch = 256 tokens)</li>
         <li><strong>Metrics:</strong> validation perplexity, loss trajectory, MFU (Model FLOPs Utilisation), tokens/s,
-          peak GPU RAM, and wall‑clock iterations / s</li>
+          peak GPU RAM, and wall‑clock iterations / s</li>
       </ul>
     </section>
 
@@ -65,8 +65,8 @@
         design space and systematically introduced modern transformer practices to CNNs. We instead start from
         GPT‑2 Small and graft in modern LLM tricks one by one. The <q>GPT‑2 Speed Run</q> competition provided practical
         baselines for throughput evaluation. We also draw on the original proposal papers for each technique:
-        <nobr>GQA (Ainslie <span class="small">et al.</span>, 2023)</nobr>, <nobr>RoPE (Su <span class="small">et al.</span>, 2021)</nobr>,
-        SwiGLU (Shazeer 2020), RMSNorm (Zhang 2019), SOAP (Wang 2024) and MUON (Pourchot 2024).</p>
+        <nobr>GQA (Ainslie <span class="small">et al.</span>, 2023)</nobr>, <nobr>RoPE (Su <span class="small">et al.</span>, 2021)</nobr>,
+        SwiGLU (Shazeer 2020), RMSNorm (Zhang 2019), SOAP (Wang 2024) and MUON (Pourchot 2024).</p>
     </section>
 
     <!-- ================= METHODS TABLE ================= -->
@@ -113,9 +113,9 @@
               <td>Fewer parameters, marginal throughput gain</td>
             </tr>
             <tr>
-              <td>FlashAttention v2 (PyTorch)</td>
+              <td>FlashAttention v2 (PyTorch)</td>
               <td>Scaled Dot‑Product Attention kernel</td>
-              <td>Up to 3× tokens/s, lower RAM</td>
+              <td>Up to 3× tokens/s, lower RAM</td>
             </tr>
           </tbody>
         </table>
@@ -173,7 +173,7 @@
             
         <p>
         Here, it proved <em>somewhat counter-productive</em>: SOAP 
-          reduced throughput by almost 40%, although perplexity was slightly better than AdamW in performance, overtaking it after step 2500. Because of the throughput reduction, we do not recommend SOAP for small
+          reduced throughput by almost 40%, although perplexity was slightly better than AdamW in performance, overtaking it after step 2500. Because of the throughput reduction, we do not recommend SOAP for small
           models.</p>
       </article>
 
@@ -212,47 +212,56 @@
     <!-- ================= DISCUSSION ================= -->
     <section id="discussion" class="my-5">
       <h2 class="text-center">Discussion &amp; Recommended Recipe</h2>
-      <p class="text-justify">Stacking the <em>wins</em>—GQA, RoPE, SwiGLU, RMSNorm and FlashAttention—yields a variant we
-        dub <strong>GPT‑2‑Retrofit</strong>. Retro‑ fit scores <strong>8.9 ppl</strong> vs 9.8 ppl baseline and trains 22 %
-        faster per epoch. Importantly, all modifications are drop‑in patches requiring <em>&lt; 20 lines</em> each in
-        <a href="https://github.com/loftuslab/gpt2‑retrofit" target="_blank">our reference PyTorch repo</a>. This makes
-        them attractive defaults for academic or production fine‑tuning on resource‑constrained GPUs.</p>
+      <p class="text-justify">
+        We evaluated a series of drop‑in algorithmic enhancements to GPT‑2 Small:
+        Grouped Query Attention (GQA) reduced GPU memory by ≈ 100 MB with negligible impact on perplexity.
+        The SOAP optimizer provided slight late‐stage perplexity gains but cut throughput by ~ 40 %, so it's not
+        recommended for small models.
+        MUON underperformed on GPT‑2 Small, increasing perplexity by + 0.8 and slowing training by 6 %.
+        RMSNorm delivered a ~ 2 % tokens/s boost with equal perplexity,
+        and PyTorch FlashAttention v2 more than doubled inference speed while shaving ≈ 180 MB of memory.
+        Rotary Positional Embeddings (RoPE) and SwiGLU activations remain promising per prior work but require
+        dedicated benchmarking in this setup.
+        Based on these findings, we recommend integrating GQA, RMSNorm, and FlashAttention v2 for immediate
+        efficiency gains on resource‑constrained GPUs, and caution careful evaluation of SOAP and MUON.
+      </p>
     </section>
+
 
     <!-- ================= CODE LINK ================= -->
     <section id="code" class="my-5 text-center">
       <h2>Code &amp; Data</h2>
       <p class="lead mb-1"><a href="https://github.com/loftuslab/gpt2-retrofit" target="_blank">github.com/loftuslab/gpt2‑retrofit</a></p>
-      <p class="small text-muted">MIT License · Reproducible with one‑line <code>bash launch.sh</code></p>
+      <p class="small text-muted">MIT License · Reproducible with one‑line <code>bash launch.sh</code></p>
     </section>
 
     <!-- ================= REFERENCES ================= -->
     <section id="references" class="my-5">
       <h3>References</h3>
       <ol class="small">
-        <li><a href="https://arxiv.org/abs/2201.03545">Liu <span class="small">et al.</span> 2022 – ConvNeXt</a></li>
-        <li>Ainslie <span class="small">et al.</span> 2023 – GQA</li>
-        <li>Su <span class="small">et al.</span> 2021 – RoPE</li>
-        <li>Shazeer 2020 – SwiGLU</li>
-        <li>Zhang &amp; Sennrich 2019 – RMSNorm</li>
-        <li>Dao <span class="small">et al.</span> 2022 – FlashAttention</li>
-        <li>Wang <span class="small">et al.</span> 2024 – SOAP Optimiser</li>
-        <li>Pourchot <span class="small">et al.</span> 2024 – MUON Optimiser</li>
-        <li>GPT‑2 Speed Run Competition, 2023</li>
+        <li><a href="https://arxiv.org/abs/2201.03545">Liu <span class="small">et al.</span> 2022 – ConvNeXt</a></li>
+        <li>Ainslie <span class="small">et al.</span> 2023 – GQA</li>
+        <li>Su <span class="small">et al.</span> 2021 – RoPE</li>
+        <li>Shazeer 2020 – SwiGLU</li>
+        <li>Zhang &amp; Sennrich 2019 – RMSNorm</li>
+        <li>Dao <span class="small">et al.</span> 2022 – FlashAttention</li>
+        <li>Wang <span class="small">et al.</span> 2024 – SOAP Optimiser</li>
+        <li>Pourchot <span class="small">et al.</span> 2024 – MUON Optimiser</li>
+        <li>GPT‑2 Speed Run Competition, 2023</li>
       </ol>
     </section>
 
     <!-- ================= TEAM ================= -->
     <section id="team" class="my-5 text-center">
       <h3>Team Members</h3>
-      <p>Kerem Sahin · Alex Loftus</p>
+      <p>Kerem Sahin · Alex Loftus</p>
     </section>
   </main>
 
   <footer class="nd-pagefooter">
     <div class="row">
       <div class="col text-center">
-        <a href="https://cs7150.baulab.info/">About CS 7150</a>
+        <a href="https://cs7150.baulab.info/">About CS 7150</a>
       </div>
     </div>
   </footer>
