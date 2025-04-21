@@ -311,7 +311,12 @@ positional encoding method.
       <article class="my-4">
         <h3>SOAP Optimiser</h3>
         <p class="text-justify">The SOAP optimizer (Second-Order Approximate Propagation) aims for rapid early‑stage progress. The idea is to bridge ideas from quasi-Newton methods and modern large-scale deep learning optimization. It's particularly notable for its ability to approximate second-order updates using only first-order information, while retaining compatibility with large-scale training. The core idea is to track a low-rank approximation to the curvature of the loss landscape, and use it to update parameters more efficiently than standard first-order methods like Adam. </p>
-            
+               <p>
+        <img src="media/soap/soap_throughput.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
+        <img src="media/soap/soap_val_perplexity.svg" alt="Second image description" style="max-width: 45%; height: auto;">
+        <p style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+
+    </p> 
         <p>
         Here, it proved <em>somewhat counter-productive</em>: SOAP 
           reduced throughput by almost 40%, although perplexity was slightly better than AdamW in performance, overtaking it after step 2500. Because of the throughput reduction, we do not recommend SOAP for small
