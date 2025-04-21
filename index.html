@@ -88,35 +88,177 @@
         </p>
 
         <h2>Grouped Query Attention</h2>
+        <h3>Core Idea</h3>
+
         <p class="text-justify">
           With normal Multi-Head Attention, every query matrix has a corresponding key and value
-          matrix.
-          The key idea behind Grouped Query Attention is to group query matrices to use the same key and value matrices
+          matrix. The key idea behind Grouped Query Attention is to group query matrices to use the same key and value
+          matrices
           in order to reduce the number of matrices while keeping a similar performance.
         </p>
         <div style="text-align: center; max-width: 700px; margin: 0 auto;">
           <img src="media/groupedq_attn/gqa.svg" alt="GQA Illustration" style="max-width: 100%; height: auto;">
-          <p style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
-            In Multi-Head Attention, every query matrix has a corresponding key and value matrix whereas with Grouped Query Attention, we grouped queries to share the key and value matrices.
+          <p
+            style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+            In Multi-Head Attention, every query matrix has a corresponding key and value matrix whereas with Grouped
+            Query Attention, we grouped queries to share the key and value matrices.
           </p>
         </div>
-        <p class="text-justify">
-            When we implement the Grouped Query Attention, the main metrics that are relavent
-            are going to be GPU Memory used throughout training and our perplexity. As we can see from the 
-            experimental results, the Grouped Query Attention is able to reduce the GPU memory usage by ~100MB while keeping the
-            perplexity and loss at a similar as the normal Multi-Head Attention. On top of that, the memory advantages are going to be 
-            even more pronounced when we are using larger models with bigger dimension sizes, more number of heads and layers. Therefore, we can conclude that the Grouped Query Attention is an effective method to 
-            reduce the GPU memory usage while keeping the performance at a similar level.
-        </p>
+        <h4>Experiments</h4>
         <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
           <img src="media/groupedq_attn/gqa_gp_gb_iter.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
           <img src="media/groupedq_attn/gqa_val_perplexity.svg" alt="Second image description" style="max-width: 45%; height: auto;">
-          <p style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
-            The memory used per iteration has dropped by ~100MB with the Grouped Query Attention. The perplexity lines are on top of each other, indicating that the performance is similar.
+          <p
+            style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+            The memory used per iteration has dropped by ~100MB with the Grouped Query Attention. The perplexity lines
+            are on top of each other, indicating that the performance is similar.
           </p>
         </div>
+        <p class="text-justify">
+          The main metrics that are relavent are going to be GPU Memory used throughout training and our perplexity. As
+          we can see from the
+          experimental results, the Grouped Query Attention is able to reduce the GPU memory usage by ~100MB while
+          keeping the
+          perplexity and loss at a similar as the normal Multi-Head Attention. On top of that, the memory advantages are
+          going to be
+          even more pronounced when we are using larger models with bigger dimension sizes, more number of heads and
+          layers. Therefore, we can conclude that the Grouped Query Attention is an effective method to
+          reduce the GPU memory usage while keeping the performance at a similar level.
+        </p>
         <h2>Rotary Position Embedding</h2>
+        <h3>Core Idea</h3>
+        <p class="text-justify">
+          Rotary Position Embedding (RoPE) is a method to encode positional information. With regular Absolute
+          Positional Encoding, the positional information is added
+          statically to the input embeddings. However, with RoPE, we instead multiply the query and key matrices with a
+          rotation matrix in order to capture
+          the positional information. A small walkthrough of the mathematical formulation can be found below:
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;">
+          <h4>Mathematical Formulation of RoPE</h4>
+
+          <p><strong>1. The Rotation Operation</strong></p>
+          <p class="text-justify">
+            In 2D space, rotating a vector (x, y) by angle θ is defined as:<br>
+            R<sub>θ</sub>(x, y) = (x·cos(θ) - y·sin(θ), x·sin(θ) + y·cos(θ))
+          </p>
+
+          <p><strong>2. Complex Number Representation</strong></p>
+          <p class="text-justify">
+            This rotation can be represented using complex numbers. For z = x + iy:<br>
+            R<sub>θ</sub>(z) = e<sup>iθ</sup> · z = (cos(θ) + i·sin(θ))(x + iy)
+          </p>
+
+          <p><strong>3. Position-Frequency Mapping</strong></p>
+          <p class="text-justify">
+            For each position m and dimension d in a model of dimension D, we define the angle of rotation as:<br>
+            θ<sub>m,d</sub> = m · θ<sub>base</sub><sup>-2d/D</sup>
+          </p>
+          <p class="text-justify">
+            Where θ<sub>base</sub> is typically 10000. Consecutive dimensions are paired (dimension 2i and 2i+1, where i
+            is the index) and each pair represents a single complex number, with the first dimension
+            corresponding to the real component and the second to the imaginary component.
+          </p>
+
+          <p><strong>4. Application to Attention</strong></p>
+          <p class="text-justify">
+            For query q at position m and key k at position n:<br>
+            q·k becomes R<sub>mθ</sub>(q)·R<sub>nθ</sub>(k) = q·R<sub>(m-n)θ</sub>(k)
+          </p>
+          <p class="text-justify">
+            This shows how RoPE naturally captures relative positions (m-n) in the attention mechanism while also
+            preserving the magnitudes of the vectors.
+          </p>
+        </div>
+        <p class="text-justify">
+          The attention mechanism in RoPE produces outputs that are primarily functions of two factors: the relative
+          distance between tokens and the content of the token embeddings themselves.
+          Therefore, this way of encoding the positional information is theoretically motivated.
+        </p>
+        <h3>Experiments</h3>
+        <p class="text-justify">
+
+        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+          <img src="media/rope/rope_val_perplexity.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
+          <img src="media/rope/rope_val_perplexity_zoomed.svg" alt="Second image description"
+            style="max-width: 45%; height: auto;">
+          <img src="media/rope/rope_tokens_per_sec_inference.svg" alt="SVG description bro"
+            style="max-width: 45%; height: auto;">
+        </div>
+        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+          <p
+            style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+            The perplexity of RoPE is consistently lower than the baseline as can be seen more clearly in the zoomed in
+            figure (top right). However,
+            the RoPE implementation significantly decreased the inference speed of the model due to the additional
+            matrix multiplications required for the rotation.
+          </p>
+        </div>
+        <p class="text-justify">
+          The RoPE implementation demonstrates 1-2 point lower perplexity scores compared to the baseline, indicating a measurable 
+          advantage. This improvement likely stems from RoPE's theoretical foundations: positional information is encoded explicitly while vector magnitudes remain preserved, potentially leading to more stable training.
+In contrast, Absolute Positional Encoding alters vector magnitudes arbitrarily, which may contribute to less stable training dynamics.
+Despite the perplexity improvements, our RoPE implementation revealed a significant drawback: decreased token processing speed during 
+inference due to the additional matrix multiplications required for rotations. This slower inference represents a considerable limitation for many practical applications.
+While RoPE offers a theoretically sound approach to encoding positional information with clear perplexity advantages 
+over Absolute Positional Encoding, the computational overhead creates performance tradeoffs that must be considered when selecting a 
+positional encoding method.
+        </p>
         <h2>SwiGLU</h2>
+        <h3>Core Idea</h3>
+        <p class="text-justify">
+          SwiGLU is an activation function that uses Gated Linear Units (GLU) and uses a Swish function instead of the
+          standard Sigmoid function. The formula for SwiGLU is:
+        </p>
+
+        <p class="text-center">
+          SwiGLU(x, W, V, b, c) = Swish(xW + b) ⊗ (xV + c)
+        </p>
+
+        <p class="text-justify">
+          Where Swish(x) = x · sigmoid(βx), and ⊗ represents element-wise multiplication. All the parameters are
+          trainable.
+        </p>
+
+        <p class="text-justify">
+          SwiGLU was introduced in the PaLM paper by Google Research as an improvement over other activation functions
+          for transformer models. While there isn't a comprehensive theoretical explanation for why SwiGLU outperforms
+          alternatives like ReLU or GELU, empirical results show it leads to better performance in large language
+          models. It's now commonly used in many state-of-the-art transformer architectures.
+        </p>
+
+        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+
+          <img src="media/swiglu/swiglu.png" alt="SVG description bro" style="max-width: 45%; height: auto;">
+        </div>
+        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+          <p
+            style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+            Illustration of SwiGLU and other similar activation functions
+          </p>
+        </div>
+        <h3>Experiments</h3>
+        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;"> 
+          <img src="media/swiglu/swiglu_val_perplexity.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
+          <img src="media/swiglu/swiglu_val_perplexity_zoomed.svg" alt="Second image description"
+            style="max-width: 45%; height: auto;">
+          <img src="media/swiglu/swiglu_train_throughput.svg" alt="SVG description bro"
+            style="max-width: 45%; height: auto;">
+          <img src="media/swiglu/swiglu_gp_gb_iter.svg" alt="SVG description bro"
+            style="max-width: 45%; height: auto;">
+        </div>
+        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+          <p
+            style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+            SwiGLU
+          </p>
+        </div>
+        <p class="text-justify">
+          SwiGLU, despite being a small implementation change, have decreased the perplexity by ~2 points throughout training. Therefore, SwiGLU is an easy way to decrease the models perplexity considering its ease of implementation.
+
+          One obvious drawback of SwiGLU is the introduction of trainable parameters. Despite being a clear advantage for model perplexity, it has caused the model to be slower according to different metrics. First, as evident from the zoomed in perplexity figure, the swiglu training
+          is cutoff at ~20k, while the baseline continued training until ~22k. Since we have allowed each model to train for 3 hours, this indicates that the training of the SwiGLU model was slower than the baseline. When we dig further, we also see that the training throughput is 100.000 tokens less than the baseline. Lastly, the new parameters have 
+          introduced 350MB more GPU Memory usage throughout training iterations. Even if SwiGLU boosts model capability, there are concerns about memory usage, training and inference speed.
+        </p>
         <h2>SOAP</h2>
         <h2>MUON</h2>
         <h2>RMSNorm</h2>
