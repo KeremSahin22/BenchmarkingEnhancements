@@ -6,16 +6,24 @@
   <title>Benchmarking Algorithmic Enhancements for LLMs – CS 7150 Project</title>
   <meta property="og:title" content="Benchmarking Algorithmic Enhancements for LLMs" />
   <meta name="twitter:title" content="Benchmarking Algorithmic Enhancements for LLMs" />
-  <meta name="description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
-  <meta property="og:description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
-  <meta name="twitter:description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
+  <meta name="description"
+    content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
+  <meta property="og:description"
+    content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
+  <meta name="twitter:description"
+    content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <!-- bootstrap for mobile-friendly layout -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
 </head>
@@ -23,7 +31,9 @@
 <body class="nd-docs">
   <header class="nd-pageheader">
     <div class="container">
-      <h1 class="lead"><nobr class="widenobr">Benchmarking Algorithmic Enhancements for Large Language Models</nobr></h1>
+      <h1 class="lead">
+        <nobr class="widenobr">Benchmarking Algorithmic Enhancements for Large Language Models</nobr>
+      </h1>
       <p class="authors">Kerem Sahin &nbsp;•&nbsp; Alex Loftus</p>
       <p class="affiliations">Khoury College of Computer Sciences, Northeastern University</p>
       <p class="text-white-50 mb-0">CS 7150: Deep Learning — Spring 2025</p>
@@ -38,36 +48,29 @@
         Transformer research from 2020 – 2024 produced a flurry of <em>algorithmic</em> upgrades—clever changes to the
         attention mechanism, activation functions, normalisation layers and optimisers—that materially improve quality
         or efficiency without changing hardware. Unfortunately, empirical comparisons are scattered: papers evaluate on
-        different datasets, model sizes or GPUs, making trade‑offs opaque. Inspired by the <a
-          href="https://arxiv.org/abs/2201.03545">ConvNeXt</a> methodology, we ask a simple question:
+        different datasets, model sizes or GPUs, making trade‑offs opaque. Inspired by the ConvNeXt<sup><a
+            href="#ref1">[1]</a></sup> methodology, we ask a simple question:
       </p>
       <blockquote class="blockquote font-italic text-center">Which modern algorithmic innovations transfer best to a
-        <strong>legacy, small‑scale</strong> language model when measured under a single experimental budget?</blockquote>
-    </section>
-
-    <!-- ================= EXPERIMENTAL SETUP ================= -->
-    <section id="setup" class="my-5">
-      <h2 class="text-center">Experimental Setup</h2>
-      <ul>
-        <li><strong>Base model:</strong> GPT‑2 Small (124 M parameters) - NanoGPT implementation</li>
-        <li><strong>Dataset:</strong> Subset of <a href="https://github.com/jcpeterson/openwebtext">OpenWebText</a>
-          (≈ 4B tokens)</li>
-        <li><strong>Compute:</strong> Single NVIDIA A100 80 GB, PyTorch 2.5, bfloat16 precision</li>
-        <li><strong>Training budget:</strong> 3 hours wall‑clock ≈ 1600 optimisation steps (batch = 512 tokens)</li>
-        <li><strong>Metrics:</strong> validation perplexity, loss trajectory, MFU (Model FLOPs Utilisation), tokens/s,
-          peak GPU RAM, and wall‑clock iterations / s</li>
-      </ul>
+        <strong>legacy, small‑scale</strong> language model when measured under a single experimental budget?
+      </blockquote>
     </section>
 
     <!-- ================= RELATED WORK ================= -->
     <section id="related-work" class="my-5">
       <h2 class="text-center">Related Work</h2>
-      <p class="text-justify">Our study mirrors <span class="font-italic">ConvNeXt</span>, which revisited the ResNet
+      <p class="text-justify">Our study mirrors <span class="font-italic">ConvNeXt</span><sup><a
+            href="#ref1">[1]</a></sup>, which revisited the ResNet
         design space and systematically introduced modern transformer practices to CNNs. We instead start from
-        GPT‑2 Small and graft in modern LLM tricks one by one. The <q>GPT‑2 Speed Run</q> competition provided practical
+        GPT‑2 Small and graft in modern LLM tricks one by one. The <q>GPT‑2 Speed Run</q><sup><a
+            href="#ref2">[2]</a></sup> competition provided practical
         baselines for throughput evaluation. We also draw on the original proposal papers for each technique:
-        <nobr>GQA (Ainslie <span class="small">et al.</span>, 2023)</nobr>, <nobr>RoPE (Su <span class="small">et al.</span>, 2021)</nobr>,
-        SwiGLU (Shazeer 2020), RMSNorm (Zhang 2019), SOAP (Wang 2024) and MUON (Pourchot 2024).</p>
+        <nobr>Grouped Query Attention<sup><a href="#ref3">[3]</a></sup></nobr>, <nobr>RoPE <sup><a
+              href="#ref4">[4]</a></sup></nobr>,
+        SwiGLU<sup><a href="#ref5">[5]</a></sup>, RMSNorm<sup><a href="#ref6">[6]</a></sup>, FlashAttention<sup><a
+            href="#ref7">[7]</a></sup>, SOAP<sup><a href="#ref8">[8]</a></sup> and MUON<sup><a
+            href="#ref9">[9]</a></sup>.
+      </p>
     </section>
 
     <!-- ================= METHODS TABLE ================= -->
@@ -113,9 +116,47 @@
               <td>LayerNorm</td>
               <td>Fewer parameters, marginal throughput gain</td>
             </tr>
+            <tr>
+              <td>FlashAttention v2 (PyTorch)</td>
+              <td>Scaled Dot‑Product Attention kernel</td>
+              <td>Up to 3× tokens/s, lower RAM</td>
+            </tr>
           </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ================= EXPERIMENTAL SETUP ================= -->
+    <section id="setup" class="my-5">
+      <h2 class="text-center">Experimental Setup</h2>
+      <p class="text-justify">In order to test the algorithmic enhancements, we have used the following setup:</p>
+
+      <ul>
+        <li><strong>Base model:</strong> GPT‑2 Small (124 M parameters) - NanoGPT implementation with a batch size of
+          256</li>
+        <li><strong>Dataset:</strong> Subset of <a href="https://github.com/jcpeterson/openwebtext">OpenWebText</a>
+          (≈ 4B tokens)</li>
+        <li><strong>Compute:</strong> Single NVIDIA A100 80 GB, PyTorch 2.5, bfloat16 precision</li>
+        <li><strong>Training budget:</strong> 3 hours wall‑clock (Each model gets trained for 3 hours, no limit on
+          number of steps)</li>
+          <li><strong>Metrics:</strong> Our naming convention follows the pattern <code>{category}/{metric_name}</code>
+            <ul>
+              <li><strong>gpu/gpu_gb_iter:</strong> Peak GPU memory usage in gigabytes tracked per iteration during training, providing visibility into model memory efficiency and helping identify potential memory bottlenecks.</li>
+          <li><strong>validation/perplexity, train/perplexity:</strong> Exponential of validation and training loss respectively, measuring prediction quality on unseen and training data. </li>
+          
+          <li><strong>validation/loss, train/loss:</strong> Cross-entropy loss on validation and training data.</li>
+          
+          <li><strong>throughput/tokens_per_sec_inference:</strong> Inference speed measured as tokens generated per second during autoregressive text generation (actual content creation), reflecting real-world generation performance.</li>
+          
+          <li><strong>train/throughput:</strong> Forward-pass evaluation speed on training data measured in tokens per second without gradient computation, providing insight into pure inference capability.</li>
+          
+          <li><strong>throughput/tokens_per_sec_train:</strong> Training speed measured as total tokens processed per second including forward pass, backpropagation, and optimization steps, representing true training throughput.</li>
+            </ul>
+          </li>
+      </ul>
+
+      <p class="text-justify">Within this setting, we implement the algorithmic enhancements seperately one-by-one and
+        apply hyperparameter tuning when necessary. We present the results in the following sections.</p>
     </section>
 
     <!-- ================= RESULTS SECTIONS ================= -->
@@ -138,36 +179,38 @@
           <p
             style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
             In Multi-Head Attention, every query matrix has a corresponding key and value matrix whereas with Grouped
-            Query Attention, we grouped queries to share the key and value matrices.
+            Query Attention, queries are grouped to share the key and value matrices.
           </p>
         </div>
         <h4>Experiments</h4>
         <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-          <img src="media/groupedq_attn/gqa_gp_gb_iter.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
-          <img src="media/groupedq_attn/gqa_val_perplexity.svg" alt="Second image description" style="max-width: 45%; height: auto;">
+          <img src="media/groupedq_attn/gqa_gp_gb_iter.svg" alt="img"
+            style="max-width: 45%; height: auto;">
+          <img src="media/groupedq_attn/gqa_val_perplexity.svg" alt="Second image description"
+            style="max-width: 45%; height: auto;">
           <p
             style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
-            The memory used per iteration has dropped by ~100MB with the Grouped Query Attention. The perplexity lines
+            The GPU memory used per iteration has dropped by ~100MB with the Grouped Query Attention. The perplexity
+            lines
             are on top of each other, indicating that the performance is similar.
           </p>
         </div>
         <p class="text-justify">
-          The main metrics that are relavent are going to be GPU Memory used throughout training and our perplexity. As
+          The main metrics that are relavent are going to be GPU Memory used throughout training and perplexity. As
           we can see from the
           experimental results, the Grouped Query Attention is able to reduce the GPU memory usage by ~100MB while
           keeping the
           perplexity and loss at a similar as the normal Multi-Head Attention. On top of that, the memory advantages are
-          going to be
-          even more pronounced when we are using larger models with bigger dimension sizes, more number of heads and
+          going to be even more pronounced when we are using larger models with bigger dimension sizes, more number of heads and
           layers. Therefore, we can conclude that the Grouped Query Attention is an effective method to
-          reduce the GPU memory usage while keeping the performance at a similar level.
+          reduce the GPU memory usage while keeping the performance at a similar level. Notably, GQA completed ~1000 more training steps than the baseline model (visible from the ending dots of both lines in perplexity graph), confirming its faster training efficiency.
         </p>
         <h2>Rotary Position Embedding</h2>
         <h3>Core Idea</h3>
         <p class="text-justify">
           Rotary Position Embedding (RoPE) is a method to encode positional information. With regular Absolute
           Positional Encoding, the positional information is added
-          statically to the input embeddings. However, with RoPE, we instead multiply the query and key matrices with a
+          statically to the input embeddings. However, with RoPE, the query and key matrices are multiplied with a
           rotation matrix in order to capture
           the positional information. A small walkthrough of the mathematical formulation can be found below:
         <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;">
@@ -209,36 +252,34 @@
         <p class="text-justify">
           The attention mechanism in RoPE produces outputs that are primarily functions of two factors: the relative
           distance between tokens and the content of the token embeddings themselves.
-          Therefore, this way of encoding the positional information is theoretically motivated.
         </p>
         <h3>Experiments</h3>
         <p class="text-justify">
 
         <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-          <img src="media/rope/rope_val_perplexity.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
+          <img src="media/rope/rope_val_perplexity.svg" alt="img" style="max-width: 45%; height: auto;">
           <img src="media/rope/rope_val_perplexity_zoomed.svg" alt="Second image description"
             style="max-width: 45%; height: auto;">
-          <img src="media/rope/rope_tokens_per_sec_inference.svg" alt="SVG description bro"
+          <img src="media/rope/rope_tokens_per_sec_inference.svg" alt="img"
             style="max-width: 45%; height: auto;">
         </div>
         <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
           <p
             style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
-            The perplexity of RoPE is consistently lower than the baseline as can be seen more clearly in the zoomed in
-            figure (top right). However,
-            the RoPE implementation significantly decreased the inference speed of the model due to the additional
-            matrix multiplications required for the rotation.
+            Perplexity with RoPE remains consistently lower than baseline (see top-right figure), but the implementation reduces inference speed due to additional matrix multiplication requirements.
           </p>
         </div>
         <p class="text-justify">
-          The RoPE implementation demonstrates 1-2 point lower perplexity scores compared to the baseline, indicating a measurable 
-          advantage. This improvement likely stems from RoPE's theoretical foundations: positional information is encoded explicitly while vector magnitudes remain preserved, potentially leading to more stable training.
-In contrast, Absolute Positional Encoding alters vector magnitudes arbitrarily, which may contribute to less stable training dynamics.
-Despite the perplexity improvements, our RoPE implementation revealed a significant drawback: decreased token processing speed during 
-inference due to the additional matrix multiplications required for rotations. This slower inference represents a considerable limitation for many practical applications.
-While RoPE offers a theoretically sound approach to encoding positional information with clear perplexity advantages 
-over Absolute Positional Encoding, the computational overhead creates performance tradeoffs that must be considered when selecting a 
-positional encoding method.
+          The RoPE implementation demonstrates ~1.5 point lower perplexity scores compared to the baseline, indicating a
+          measurable
+          advantage. This improvement likely stems from RoPE's theoretical foundations: positional information is
+          encoded explicitly while vector magnitudes remain preserved, potentially leading to more stable training.
+          In contrast, Absolute Positional Encoding alters vector magnitudes arbitrarily, which may contribute to less
+          stable training dynamics.
+          Despite the perplexity improvements, our RoPE implementation revealed a significant drawback: decreased token
+          processing speed during
+          inference due to the additional matrix multiplications required for rotations. This slower inference possibly
+          can become a limitation for practical applications.
         </p>
         <h2>SwiGLU</h2>
         <h3>Core Idea</h3>
@@ -265,7 +306,7 @@ positional encoding method.
 
         <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
 
-          <img src="media/swiglu/swiglu.png" alt="SVG description bro" style="max-width: 45%; height: auto;">
+          <img src="media/swiglu/swiglu.png" alt="img" style="max-width: 45%; height: auto;">
         </div>
         <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
           <p
@@ -274,73 +315,115 @@ positional encoding method.
           </p>
         </div>
         <h3>Experiments</h3>
-        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;"> 
-          <img src="media/swiglu/swiglu_val_perplexity.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
+        <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+          <img src="media/swiglu/swiglu_val_perplexity.svg" alt="img"
+            style="max-width: 45%; height: auto;">
           <img src="media/swiglu/swiglu_val_perplexity_zoomed.svg" alt="Second image description"
             style="max-width: 45%; height: auto;">
-          <img src="media/swiglu/swiglu_train_throughput.svg" alt="SVG description bro"
+          <img src="media/swiglu/swiglu_train_throughput.svg" alt="img"
             style="max-width: 45%; height: auto;">
-          <img src="media/swiglu/swiglu_gp_gb_iter.svg" alt="SVG description bro"
-            style="max-width: 45%; height: auto;">
+          <img src="media/swiglu/swiglu_gp_gb_iter.svg" alt="img" style="max-width: 45%; height: auto;">
         </div>
         <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
           <p
             style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
-            SwiGLU provides a decrease for perplexity by ~2 points. However, it leads to ~100.000 less throughput which also slows down the training process. The newly introduced parameters also increase the GPU Memory Usage by ~350MB
+            SwiGLU reduces perplexity by ~2 points but decreases throughput by ~100,000, slowing training and increasing GPU memory usage by ~350MB.
           </p>
         </div>
         <p class="text-justify">
-          SwiGLU, despite being a small implementation change, have decreased the perplexity by ~2 points throughout training. Therefore, SwiGLU is an easy way to decrease the models perplexity considering its ease of implementation.
+          SwiGLU, despite being a small implementation change, have decreased the perplexity by ~2 points throughout
+          training. Therefore, SwiGLU is an easy way to decrease the models perplexity considering its ease of
+          implementation.
 
-          One obvious drawback of SwiGLU is the introduction of trainable parameters. Despite being a clear advantage for model perplexity, it has caused the model to be slower according to different metrics. First, as evident from the zoomed in perplexity figure, the swiglu training
-          is cutoff at ~20k, while the baseline continued training until ~22k. Since we have allowed each model to train for 3 hours, this indicates that the training of the SwiGLU model was slower than the baseline. When we dig further, we also see that the training throughput is 100.000 tokens less than the baseline. Lastly, the new parameters have 
-          introduced 350MB more GPU Memory usage throughout training iterations. Even if SwiGLU boosts model capability, there are concerns about memory usage, training and inference speed.
+          One obvious drawback of SwiGLU is the introduction of trainable parameters. Despite being a clear advantage
+          for model perplexity, it has caused the model to be slower according to different metrics. First, as evident
+          from the zoomed in perplexity figure, the swiglu training
+          is cutoff at ~20k, while the baseline continued training until ~22k. Since we have allowed each model to train
+          for 3 hours, this indicates that the training of the SwiGLU model was slower than the baseline. When we dig
+          further, we also see that the training throughput is 100.000 tokens less than the baseline. Lastly, the new
+          parameters have
+          introduced 350MB more GPU Memory usage throughout training iterations. Even if SwiGLU boosts model capability,
+          there are concerns about memory usage, training and inference speed.
         </p>
 
-      </div><!--col-->
-    </div><!--row -->
-  </div> <!-- container -->
-          <!-- RoPE -->
+        </div><!--col-->
+        </div><!--row -->
+        </div> <!-- container -->
+        <!-- RoPE -->
 
-      <!-- SOAP -->
-      <article class="my-4">
-        <h3>SOAP Optimiser</h3>
-        <p class="text-justify">The SOAP optimizer (Second-Order Approximate Propagation) aims for rapid early‑stage progress. The idea is to bridge ideas from quasi-Newton methods and modern large-scale deep learning optimization. It's particularly notable for its ability to approximate second-order updates using only first-order information, while retaining compatibility with large-scale training. The core idea is to track a low-rank approximation to the curvature of the loss landscape, and use it to update parameters more efficiently than standard first-order methods like Adam. </p>
-               <p>
-        <img src="media/soap/soap_throughput.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
-        <img src="media/soap/soap_val_perplexity.svg" alt="Second image description" style="max-width: 45%; height: auto;">
-        <p style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+        <!-- SOAP -->
+        <article class="my-4">
+          <h2>SOAP Optimiser</h2>
+          <h3>Core Idea</h3>
+          <p class="text-justify">The SOAP optimizer (Second-Order Approximate Propagation) aims for rapid early‑stage
+            progress. The idea is to bridge ideas from quasi-Newton methods and modern large-scale deep learning
+            optimization. It's particularly notable for its ability to approximate second-order updates using only
+            first-order information, while retaining compatibility with large-scale training. The core idea is to track
+            a low-rank approximation to the curvature of the loss landscape, and use it to update parameters more
+            efficiently than standard first-order methods like Adam. </p>
+          <p>
+          <h3>Experiments</h3>
+          <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
 
-    </p> 
-        <p>
-        Here, it proved <em>somewhat counter-productive</em>: SOAP 
-          reduced throughput by almost 40%, although perplexity was slightly better than AdamW in performance, overtaking it after step 2500. Because of the throughput reduction, we do not recommend SOAP for small
-          models.</p>
-      </article>
+          <img src="media/soap/soap_throughput.svg" alt="img" style="max-width: 45%; height: auto;">
+          <img src="media/soap/soap_val_perplexity.svg" alt="Second image description"
+            style="max-width: 45%; height: auto;">
+            </div>
+          <p
+            style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
 
-    <article class="my-4">
-        <h3>MUON Optimiser</h3>
-        <p class="text-justify">
-        MUON (MomentUm Orthogonalized by Newton-Schulz) is an optimizer designed only for the hidden layers of neural networks, particularly those with 2D parameters. It operates by first computing the standard momentum-based gradient updates and then applying a Newton-Schulz iteration to orthogonalize these updates. This orthogonalization process aims to improve the conditioning of the updates, potentially leading to better training dynamics and efficiency.​
-    </p>
+          </p>
 
-    <p>
-    <img src="media/muon/muon_training_throughput.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
-    <img src="media/muon/muon_perplexity.svg" alt="Second image description" style="max-width: 45%; height: auto;">
-    <p style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
-    MUON gives slightly worse perplexity and throughput than the baseline, although this may be well within the margin of error.
-    </p>
-    <p class="text-justify">
-        However, in our experiments on GPT‑2 Small—a dense, low-parameter regime—MUON under‑performed: it yielded <strong>+0.8 perplexity</strong> and 6 % slower training compared to AdamW. We attribute this to a mismatch between MUON's hyperparameter tuning and the dense characteristics of our toy workload.
-    </p>
-    </article>
-      <!-- RMSNorm -->
-      <article class="my-4">
-        <h3>RMSNorm</h3>
-        <p class="text-justify">RMS norm is a simple change to the normalization step in which we drop mean subtraction to simplify. We measured a
-          <strong>+2 % tokens/s</strong> boost with equal perplexity. The change is independent and easy to integrate., but the effect size is small.</p>
-              <img src="media/rmsnorm_throughput.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
-      </article>
+          <p>
+            Here, it proved <em>somewhat counter-productive</em>: SOAP
+            reduced throughput by almost 40%, although perplexity was slightly better than AdamW in performance,
+            overtaking it after step 2500. Because of the throughput reduction, SOAP implementation is not advantageous according to our analysis.</p>
+        </article>
+
+        <article class="my-4">
+          <h2>MUON Optimiser</h2>
+          <h3>Core Idea</h3>
+          <p class="text-justify">
+            MUON (MomentUm Orthogonalized by Newton-Schulz) is an optimizer designed only for the hidden layers of
+            neural networks, particularly those with 2D parameters. It operates by first computing the standard
+            momentum-based gradient updates and then applying a Newton-Schulz iteration to orthogonalize these updates.
+            This orthogonalization process aims to improve the conditioning of the updates, potentially leading to
+            better training dynamics and efficiency.​
+          </p>
+          <h3>Experiments</h3>
+          <p>
+          <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+
+            <img src="media/muon/muon_training_throughput.svg" alt="img"
+              style="max-width: 45%; height: auto;">
+            <img src="media/muon/muon_perplexity.svg" alt="Second image description"
+              style="max-width: 45%; height: auto;">
+          </div>
+              <p
+            style="font-size: 0.9rem; text-align: center; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+            MUON gives slightly worse perplexity and throughput than the baseline, although this may be well within the
+            margin of error.
+          </p>
+          <p class="text-justify">
+            However, in our experiments on GPT‑2 Small—a dense, low-parameter regime—MUON under‑performed: it yielded
+            <strong>+0.8 perplexity</strong> and 6 % slower training compared to AdamW. We attribute this to a mismatch
+            between MUON's hyperparameter tuning and the dense characteristics of our toy workload. Even though we have done hyperparameter tuning -as far as our computational budget allowed us to-
+            it was not enough the bring out the true potential that is expected from MUON, suggesting less robustness against hyperparameter tuning.
+          </p>
+        </article>
+        <!-- RMSNorm -->
+        <article class="my-4">
+          <h3>RMSNorm</h3>
+          <p class="text-justify">RMS norm is a simple change to the normalization step in which we drop mean
+            subtraction to simplify. We measured a
+            <strong>+2 % tokens/s</strong> boost with equal perplexity. The change is independent and easy to
+            integrate., but the effect size is small.
+          </p>
+          <div style="text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+
+          <img src="media/rmsnorm_throughput.svg" alt="img" style="max-width: 45%; height: auto;">
+            </div>
+        </article>
 
     </section>
 
@@ -348,19 +431,21 @@ positional encoding method.
     <section id="discussion" class="my-5">
       <h2 class="text-center">Discussion &amp; Recommended Recipe</h2>
       <p class="text-justify">
-        We evaluated a series of drop-in algorithmic enhancements to GPT-2 
-        Small: Grouped Query Attention (GQA) reduced GPU memory by ≈100 MB 
-        with negligible impact on perplexity. The SOAP optimizer provided 
-        slight late-stage perplexity gains but cut throughput by ~40%, so 
-        it's not recommended for small models. MUON underperformed on GPT-2 
-        Small, increasing perplexity by +0.8 and slowing training by 6%. 
-        RMSNorm delivered a ~2% tokens/s boost with equal perplexity, and 
-        Rotary Positional Embeddings (RoPE) and SwiGLU activations remain promising for increasing model capability 
-        but they impact computation speed. Based on these findings, we recommend 
-        integrating GQA, RMSNorm, and RoPE for immediate efficiency 
-        gains on resource-constrained GPUs, and suggest careful evaluation of SOAP 
-        and MUON. SwiGLU is recommended for decreasing model perplexity, 
-        but caution is needed regarding their computational requirements.
+        We evaluated a series of drop-in algorithmic enhancements to GPT-2
+        Small: Grouped Query Attention (GQA) reduced GPU memory by ≈100 MB
+        with negligible impact on perplexity. The SOAP optimizer provided
+        slight late-stage perplexity gains but cut throughput by ~40%, so
+        it's not recommended for small models. MUON underperformed on GPT-2
+        Small, increasing perplexity by +0.8 and slowing training by 6%.
+        RMSNorm delivered a ~2% tokens/s boost with equal perplexity, and
+        Rotary Positional Embeddings (RoPE) and SwiGLU activations remain promising for increasing model capability
+        but they impact computation speed. Based on these findings, we recommend
+        integrating GQA, RMSNorm for immediate efficiency
+        gains on resource-constrained GPUs, and suggest careful evaluation of SOAP
+        and MUON. SwiGLU and RoPE is recommended for decreasing model perplexity,
+        but caution is needed regarding their computational requirements. We believe that this evaluation is useful
+        as a guide for people who are planning to train small models with limited compute. However, for generalization to bigger models
+        and much higher training times, further evaluation is needed to give a conclusive answer.
       </p>
     </section>
 
@@ -368,21 +453,37 @@ positional encoding method.
     <!-- ================= CODE LINK ================= -->
     <section id="code" class="my-5 text-center">
       <h2>Code &amp; Data</h2>
-      <p class="lead mb-1"><a href="https://github.com/loftusa/GPTNext" target="_blank">github.com/loftusa/GPTNext</a></p>
+      <p class="lead mb-1"><a href="https://github.com/loftusa/GPTNext"
+          target="_blank">https://github.com/loftusa/GPTNext/</a></p>
+      <p class="small text-muted">MIT License</p>
     </section>
 
     <!-- ================= REFERENCES ================= -->
     <section id="references" class="my-5">
       <h3>References</h3>
       <ol class="small">
-        <li><a href="https://arxiv.org/abs/2201.03545">Liu <span class="small">et al.</span> 2022 – ConvNeXt</a></li>
-        <li>Ainslie <span class="small">et al.</span> 2023 – GQA</li>
-        <li>Su <span class="small">et al.</span> 2021 – RoPE</li>
-        <li>Shazeer 2020 – SwiGLU</li>
-        <li>Zhang &amp; Sennrich 2019 – RMSNorm</li>
-        <li>Wang <span class="small">et al.</span> 2024 – SOAP Optimiser</li>
-        <li>Pourchot <span class="small">et al.</span> 2024 – MUON Optimiser</li>
-        <li>GPT‑2 Speed Run Competition, 2023</li>
+
+        <li id="ref1"><a href="https://arxiv.org/abs/2201.03545">Z. Liu et al., “A convnet for the 2020s,” arXiv.org,
+            https://arxiv.org/abs/2201.03545 .</a></li>
+        <li id="ref2"><a href="https://github.com/KellerJordan/modded-nanogpt">Jordan <span class="small">et al.</span>
+            2023 – GPT‑2 Speed Run Competition</a></li>
+        <li id="ref3"><a href="https://arxiv.org/abs/2305.13245">J. Ainslie et al., “GQA: Training generalized
+            Multi-Query Transformer models from multi-head checkpoints,” arXiv.org, https://arxiv.org/abs/2305.13245 .
+          </a></li>
+        <li id="ref4"><a href="https://arxiv.org/abs/2104.09864">J. Su et al., “Roformer: Enhanced Transformer with
+            rotary position embedding,” arXiv.org, https://arxiv.org/abs/2104.09864 . </a></li>
+        <li id="ref5"><a href="https://arxiv.org/abs/2002.05202">N. Shazeer, “Glu variants improve transformer,”
+            arXiv.org, https://arxiv.org/abs/2002.05202 . </a></li>
+        <li id="ref6"><a href="https://arxiv.org/abs/1910.07467">B. Zhang and R. Sennrich, “Root mean square layer
+            normalization,” arXiv.org, https://arxiv.org/abs/1910.07467 . </a></li>
+        <li id="ref7"><a href="https://arxiv.org/abs/2205.14135">T. Dao, D. Y. Fu, S. Ermon, A. Rudra, and C. Ré,
+            “Flashattention: Fast and memory-efficient exact attention with IO-awareness,” arXiv.org,
+            https://arxiv.org/abs/2205.14135 . </a></li>
+        <li id="ref8"><a href="https://arxiv.org/abs/2409.11321">N. Vyas et al., “Soap: Improving and stabilizing
+            shampoo using adam,” arXiv.org, https://arxiv.org/abs/2409.11321 . </a></li>
+        <li id="ref9"><a href="">K. Jordan, “Muon: An optimizer for hidden layers in neural networks,” Keller Jordan
+            blog, https://kellerjordan.github.io/posts/muon/ . </a></li>
+
       </ol>
     </section>
 
