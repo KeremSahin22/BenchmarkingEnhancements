@@ -6,9 +6,9 @@
   <title>Benchmarking Algorithmic Enhancements for LLMs – CS 7150 Project</title>
   <meta property="og:title" content="Benchmarking Algorithmic Enhancements for LLMs" />
   <meta name="twitter:title" content="Benchmarking Algorithmic Enhancements for LLMs" />
-  <meta name="description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm, FlashAttention) applied to GPT‑2 Small." />
-  <meta property="og:description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm, FlashAttention) applied to GPT‑2 Small." />
-  <meta name="twitter:description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm, FlashAttention) applied to GPT‑2 Small." />
+  <meta name="description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
+  <meta property="og:description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
+  <meta name="twitter:description" content="CS 7150 final project: a systematic study of modern algorithmic upgrades (GQA, RoPE, SwiGLU, SOAP, MUON, RMSNorm) applied to GPT‑2 Small." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -312,7 +312,12 @@ positional encoding method.
       <article class="my-4">
         <h3>SOAP Optimiser</h3>
         <p class="text-justify">The SOAP optimizer (Second-Order Approximate Propagation) aims for rapid early‑stage progress. The idea is to bridge ideas from quasi-Newton methods and modern large-scale deep learning optimization. It's particularly notable for its ability to approximate second-order updates using only first-order information, while retaining compatibility with large-scale training. The core idea is to track a low-rank approximation to the curvature of the loss landscape, and use it to update parameters more efficiently than standard first-order methods like Adam. </p>
-            
+               <p>
+        <img src="media/soap/soap_throughput.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
+        <img src="media/soap/soap_val_perplexity.svg" alt="Second image description" style="max-width: 45%; height: auto;">
+        <p style="font-size: 0.9rem; color: #666; font-style: italic; margin-top: 8px; font-family: Arial, sans-serif;">
+
+    </p> 
         <p>
         Here, it proved <em>somewhat counter-productive</em>: SOAP 
           reduced throughput by almost 40%, although perplexity was slightly better than AdamW in performance, overtaking it after step 2500. Because of the throughput reduction, we do not recommend SOAP for small
@@ -338,17 +343,11 @@ positional encoding method.
       <!-- RMSNorm -->
       <article class="my-4">
         <h3>RMSNorm</h3>
-        <p class="text-justify">Dropping mean subtraction simplifies the normalisation step. We measured a
-          <strong>+2 % tokens/s</strong> boost with equal perplexity. The change is independent and easy to integrate.</p>
+        <p class="text-justify">RMS norm is a simple change to the normalization step in which we drop mean subtraction to simplify. We measured a
+          <strong>+2 % tokens/s</strong> boost with equal perplexity. The change is independent and easy to integrate., but the effect size is small.</p>
+              <img src="media/rmsnorm_throughput.svg" alt="SVG description bro" style="max-width: 45%; height: auto;">
       </article>
 
-      <!-- FlashAttention -->
-      <article class="my-4">
-        <h3>PyTorch FlashAttention v2</h3>
-        <p class="text-justify">Finally, swapping in the <code>torch.nn.functional.scaled_dot_product_attention</code>
-          kernel more than doubled <em>inference</em> tokens/s and shaved another 180 MB off memory. Combined with GQA and
-          RMSNorm this free upgrade lets GPT‑2 Small fit context lengths up to 4096 on a 24 GB GPU.</p>
-      </article>
     </section>
 
     <!-- ================= DISCUSSION ================= -->
@@ -362,13 +361,11 @@ positional encoding method.
         it's not recommended for small models. MUON underperformed on GPT-2 
         Small, increasing perplexity by +0.8 and slowing training by 6%. 
         RMSNorm delivered a ~2% tokens/s boost with equal perplexity, and 
-        PyTorch FlashAttention v2 more than doubled inference speed while 
-        reducing memory usage by ≈180 MB. Rotary Positional Embeddings (RoPE) 
-        and SwiGLU activations remain promising for increasing model capability 
+        Rotary Positional Embeddings (RoPE) and SwiGLU activations remain promising for increasing model capability 
         but they impact computation speed. Based on these findings, we recommend 
-        integrating GQA, RMSNorm, and FlashAttention v2 for immediate efficiency 
+        integrating GQA, RMSNorm, and RoPE for immediate efficiency 
         gains on resource-constrained GPUs, and suggest careful evaluation of SOAP 
-        and MUON. SwiGLU and RoPE are recommended for decreasing model perplexity, 
+        and MUON. SwiGLU is recommended for decreasing model perplexity, 
         but caution is needed regarding their computational requirements.
       </p>
     </section>
@@ -385,6 +382,7 @@ positional encoding method.
     <section id="references" class="my-5">
       <h3>References</h3>
       <ol class="small">
+
       <li id="ref1"><a href="https://arxiv.org/abs/2201.03545">Z. Liu et al., “A convnet for the 2020s,” arXiv.org, https://arxiv.org/abs/2201.03545 .</a></li>
       <li id="ref2"><a href="https://github.com/KellerJordan/modded-nanogpt">Jordan <span class="small">et al.</span> 2023 – GPT‑2 Speed Run Competition</a></li>
       <li id="ref3"><a href="https://arxiv.org/abs/2305.13245">J. Ainslie et al., “GQA: Training generalized Multi-Query Transformer models from multi-head checkpoints,” arXiv.org, https://arxiv.org/abs/2305.13245 . </a></li>
@@ -394,6 +392,7 @@ positional encoding method.
       <li id="ref7"><a href="https://arxiv.org/abs/2205.14135">T. Dao, D. Y. Fu, S. Ermon, A. Rudra, and C. Ré, “Flashattention: Fast and memory-efficient exact attention with IO-awareness,” arXiv.org, https://arxiv.org/abs/2205.14135 . </a></li>
       <li id="ref8"><a href="https://arxiv.org/abs/2409.11321">N. Vyas et al., “Soap: Improving and stabilizing shampoo using adam,” arXiv.org, https://arxiv.org/abs/2409.11321 . </a></li>
       <li id="ref9"><a href="">K. Jordan, “Muon: An optimizer for hidden layers in neural networks,” Keller Jordan blog, https://kellerjordan.github.io/posts/muon/ . </a></li>
+
       </ol>
     </section>
 
