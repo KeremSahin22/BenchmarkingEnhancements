@@ -201,10 +201,9 @@
           experimental results, the Grouped Query Attention is able to reduce the GPU memory usage by ~100MB while
           keeping the
           perplexity and loss at a similar as the normal Multi-Head Attention. On top of that, the memory advantages are
-          going to be
-          even more pronounced when we are using larger models with bigger dimension sizes, more number of heads and
+          going to be even more pronounced when we are using larger models with bigger dimension sizes, more number of heads and
           layers. Therefore, we can conclude that the Grouped Query Attention is an effective method to
-          reduce the GPU memory usage while keeping the performance at a similar level.
+          reduce the GPU memory usage while keeping the performance at a similar level. Notably, GQA completed ~1000 more training steps than the baseline model (visible from the ending dots of both lines in perplexity graph), confirming its faster training efficiency.
         </p>
         <h2>Rotary Position Embedding</h2>
         <h3>Core Idea</h3>
