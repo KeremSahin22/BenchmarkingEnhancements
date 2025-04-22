@@ -45,77 +45,83 @@
         <strong>legacy, small‑scale</strong> language model when measured under a single experimental budget?</blockquote>
     </section>
 
+    <!-- ================= RELATED WORK ================= -->
+    <section id="related-work" class="my-5">
+      <h2 class="text-center">Related Work</h2>
+      <p class="text-justify">Our study mirrors <span class="font-italic">ConvNeXt</span><sup><a href="#ref1">[1]</a></sup>, which revisited the ResNet
+        design space and systematically introduced modern transformer practices to CNNs. We instead start from
+        GPT‑2 Small and graft in modern LLM tricks one by one. The <q>GPT‑2 Speed Run</q><sup><a href="#ref2">[2]</a></sup> competition provided practical
+        baselines for throughput evaluation. We also draw on the original proposal papers for each technique:
+        <nobr>Grouped Query Attention<sup><a href="#ref3">[3]</a></sup></nobr>, <nobr>RoPE <sup><a href="#ref4">[4]</a></sup></nobr>,
+        SwiGLU<sup><a href="#ref5">[5]</a></sup>, RMSNorm<sup><a href="#ref6">[6]</a></sup>, FlashAttention<sup><a href="#ref7">[7]</a></sup>, SOAP<sup><a href="#ref8">[8]</a></sup> and MUON<sup><a href="#ref9">[9]</a></sup>.</p>
+    </section>
+
+        <!-- ================= METHODS TABLE ================= -->
+        <section id="methods" class="my-5">
+          <h2 class="text-center">Algorithmic Enhancements Evaluated</h2>
+          <div class="table-responsive">
+            <table class="table table-sm table-striped">
+              <thead class="thead-light">
+                <tr>
+                  <th>Technique</th>
+                  <th>Component Replaced</th>
+                  <th>Claimed Benefit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Grouped Query Attention (GQA)</td>
+                  <td>Multi‑Head Attention</td>
+                  <td>Memory reduction, faster training</td>
+                </tr>
+                <tr>
+                  <td>Rotary Positional Embedding (RoPE)</td>
+                  <td>Absolute Positional Encoding</td>
+                  <td>Long‑context generalisation, lower perplexity</td>
+                </tr>
+                <tr>
+                  <td>SwiGLU</td>
+                  <td>GELU</td>
+                  <td>Higher model capacity at fixed FLOPs</td>
+                </tr>
+                <tr>
+                  <td>SOAP Optimiser</td>
+                  <td>AdamW</td>
+                  <td>Faster convergence early in training</td>
+                </tr>
+                <tr>
+                  <td>MUON Optimiser</td>
+                  <td>AdamW</td>
+                  <td>Stability on sparse gradients</td>
+                </tr>
+                <tr>
+                  <td>RMSNorm</td>
+                  <td>LayerNorm</td>
+                  <td>Fewer parameters, marginal throughput gain</td>
+                </tr>
+                <tr>
+                  <td>FlashAttention v2 (PyTorch)</td>
+                  <td>Scaled Dot‑Product Attention kernel</td>
+                  <td>Up to 3× tokens/s, lower RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
     <!-- ================= EXPERIMENTAL SETUP ================= -->
     <section id="setup" class="my-5">
       <h2 class="text-center">Experimental Setup</h2>
+      <p class="text-justify">In order to test the algorithmic enhancements, we have used the following setup:</p> 
+
       <ul>
         <li><strong>Base model:</strong> GPT‑2 Small (124 M parameters) - NanoGPT implementation</li>
         <li><strong>Dataset:</strong> Subset of <a href="https://github.com/jcpeterson/openwebtext">OpenWebText</a>
           (≈ 4B tokens)</li>
-        <li><strong>Compute:</strong> Single NVIDIA A100 80 GB, PyTorch 2.5, bfloat16 precision</li>
-        <li><strong>Training budget:</strong> 3 hours wall‑clock ≈ 1600 optimisation steps (batch = 512 tokens)</li>
-        <li><strong>Metrics:</strong> validation perplexity, loss trajectory, MFU (Model FLOPs Utilisation), tokens/s,
-          peak GPU RAM, and wall‑clock iterations / s</li>
+        <li><strong>Compute:</strong> Single NVIDIA A100 80 GB, PyTorch 2.5, bfloat16 precision</li>
+        <li><strong>Training budget:</strong> 3 hours wall‑clock (batch = 256 tokens)</li>
+        <li><strong>Metrics:</strong> Validation and Training perplexity, validation and training loss, throughput measured as inference speed (tokens generated per second during autoregressive generation) and training speed (total tokens processed per second including batching), MFU (Model FLOPs Utilization), and peak GPU RAM consumption during training.</li>
       </ul>
-    </section>
-
-    <!-- ================= RELATED WORK ================= -->
-    <section id="related-work" class="my-5">
-      <h2 class="text-center">Related Work</h2>
-      <p class="text-justify">Our study mirrors <span class="font-italic">ConvNeXt</span>, which revisited the ResNet
-        design space and systematically introduced modern transformer practices to CNNs. We instead start from
-        GPT‑2 Small and graft in modern LLM tricks one by one. The <q>GPT‑2 Speed Run</q> competition provided practical
-        baselines for throughput evaluation. We also draw on the original proposal papers for each technique:
-        <nobr>GQA (Ainslie <span class="small">et al.</span>, 2023)</nobr>, <nobr>RoPE (Su <span class="small">et al.</span>, 2021)</nobr>,
-        SwiGLU (Shazeer 2020), RMSNorm (Zhang 2019), SOAP (Wang 2024) and MUON (Pourchot 2024).</p>
-    </section>
-
-    <!-- ================= METHODS TABLE ================= -->
-    <section id="methods" class="my-5">
-      <h2 class="text-center">Algorithmic Enhancements Evaluated</h2>
-      <div class="table-responsive">
-        <table class="table table-sm table-striped">
-          <thead class="thead-light">
-            <tr>
-              <th>Technique</th>
-              <th>Component Replaced</th>
-              <th>Claimed Benefit</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Grouped Query Attention (GQA)</td>
-              <td>Multi‑Head Attention</td>
-              <td>Memory reduction, faster training</td>
-            </tr>
-            <tr>
-              <td>Rotary Positional Embedding (RoPE)</td>
-              <td>Absolute Positional Encoding</td>
-              <td>Long‑context generalisation, lower perplexity</td>
-            </tr>
-            <tr>
-              <td>SwiGLU</td>
-              <td>GELU</td>
-              <td>Higher model capacity at fixed FLOPs</td>
-            </tr>
-            <tr>
-              <td>SOAP Optimiser</td>
-              <td>AdamW</td>
-              <td>Faster convergence early in training</td>
-            </tr>
-            <tr>
-              <td>MUON Optimiser</td>
-              <td>AdamW</td>
-              <td>Stability on sparse gradients</td>
-            </tr>
-            <tr>
-              <td>RMSNorm</td>
-              <td>LayerNorm</td>
-              <td>Fewer parameters, marginal throughput gain</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </section>
 
     <!-- ================= RESULTS SECTIONS ================= -->
@@ -369,21 +375,24 @@ positional encoding method.
     <section id="code" class="my-5 text-center">
       <h2>Code &amp; Data</h2>
       <p class="lead mb-1"><a href="https://github.com/loftusa/GPTNext" target="_blank">github.com/loftuslab/gpt2‑retrofit</a></p>
-      <p class="small text-muted">MIT License · Reproducible with one‑line <code>bash launch.sh</code></p>
+      <p class="small text-muted">MIT License</p>
     </section>
 
     <!-- ================= REFERENCES ================= -->
     <section id="references" class="my-5">
       <h3>References</h3>
       <ol class="small">
-        <li><a href="https://arxiv.org/abs/2201.03545">Liu <span class="small">et al.</span> 2022 – ConvNeXt</a></li>
-        <li>Ainslie <span class="small">et al.</span> 2023 – GQA</li>
-        <li>Su <span class="small">et al.</span> 2021 – RoPE</li>
-        <li>Shazeer 2020 – SwiGLU</li>
-        <li>Zhang &amp; Sennrich 2019 – RMSNorm</li>
-        <li>Wang <span class="small">et al.</span> 2024 – SOAP Optimiser</li>
-        <li>Pourchot <span class="small">et al.</span> 2024 – MUON Optimiser</li>
-        <li>GPT‑2 Speed Run Competition, 2023</li>
+
+      <li id="ref1"><a href="https://arxiv.org/abs/2201.03545">Z. Liu et al., “A convnet for the 2020s,” arXiv.org, https://arxiv.org/abs/2201.03545 .</a></li>
+      <li id="ref2"><a href="https://github.com/KellerJordan/modded-nanogpt">Jordan <span class="small">et al.</span> 2023 – GPT‑2 Speed Run Competition</a></li>
+      <li id="ref3"><a href="https://arxiv.org/abs/2305.13245">J. Ainslie et al., “GQA: Training generalized Multi-Query Transformer models from multi-head checkpoints,” arXiv.org, https://arxiv.org/abs/2305.13245 . </a></li>
+      <li id="ref4"><a href="https://arxiv.org/abs/2104.09864">J. Su et al., “Roformer: Enhanced Transformer with rotary position embedding,” arXiv.org, https://arxiv.org/abs/2104.09864 . </a></li>
+      <li id="ref5"><a href="https://arxiv.org/abs/2002.05202">N. Shazeer, “Glu variants improve transformer,” arXiv.org, https://arxiv.org/abs/2002.05202 . </a></li>
+      <li id="ref6"><a href="https://arxiv.org/abs/1910.07467">B. Zhang and R. Sennrich, “Root mean square layer normalization,” arXiv.org, https://arxiv.org/abs/1910.07467 . </a></li>
+      <li id="ref7"><a href="https://arxiv.org/abs/2205.14135">T. Dao, D. Y. Fu, S. Ermon, A. Rudra, and C. Ré, “Flashattention: Fast and memory-efficient exact attention with IO-awareness,” arXiv.org, https://arxiv.org/abs/2205.14135 . </a></li>
+      <li id="ref8"><a href="https://arxiv.org/abs/2409.11321">N. Vyas et al., “Soap: Improving and stabilizing shampoo using adam,” arXiv.org, https://arxiv.org/abs/2409.11321 . </a></li>
+      <li id="ref9"><a href="">K. Jordan, “Muon: An optimizer for hidden layers in neural networks,” Keller Jordan blog, https://kellerjordan.github.io/posts/muon/ . </a></li>
+
       </ol>
     </section>
 
